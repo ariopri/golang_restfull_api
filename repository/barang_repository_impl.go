@@ -18,7 +18,7 @@ func (repository *BarangRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, ba
 	helper.PanicIfError(err)
 	id, err := result.LastInsertId()
 	helper.PanicIfError(err)
-	barang.ID = int(id)
+	barang.Id = int(id)
 	return barang
 
 	/*
@@ -71,7 +71,7 @@ func (repository *BarangRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, ba
 func (repository *BarangRepositoryImpl) Update(ctx context.Context, tx *sql.Tx, barang domain.Barang) domain.Barang {
 	//TODO implement me
 	SQL := "update barang set nama = ?, harga = ?, stok = ? where id = ?"
-	_, err := tx.ExecContext(ctx, SQL, barang.Nama, barang.Harga, barang.Stok, barang.ID)
+	_, err := tx.ExecContext(ctx, SQL, barang.Nama, barang.Harga, barang.Stok, barang.Id)
 	helper.PanicIfError(err)
 	return barang
 }
@@ -79,7 +79,7 @@ func (repository *BarangRepositoryImpl) Update(ctx context.Context, tx *sql.Tx, 
 func (repository *BarangRepositoryImpl) Delete(ctx context.Context, tx *sql.Tx, barang domain.Barang) {
 	//TODO implement me
 	SQL := "delete from barang where id = ?"
-	_, err := tx.ExecContext(ctx, SQL, barang.ID)
+	_, err := tx.ExecContext(ctx, SQL, barang.Id)
 	helper.PanicIfError(err)
 }
 
@@ -92,7 +92,7 @@ func (repository *BarangRepositoryImpl) FindById(ctx context.Context, tx *sql.Tx
 
 	barang := domain.Barang{}
 	if rows.Next() {
-		err := rows.Scan(&barang.ID, &barang.Nama, &barang.Harga, &barang.Stok)
+		err := rows.Scan(&barang.Id, &barang.Nama, &barang.Harga, &barang.Stok)
 		helper.PanicIfError(err)
 		return barang, nil
 	} else {
@@ -125,7 +125,7 @@ func (repository *BarangRepositoryImpl) FindAll(ctx context.Context, tx *sql.Tx)
 	var barangs []domain.Barang
 	for rows.Next() {
 		barang := domain.Barang{}
-		err := rows.Scan(&barang.ID, &barang.Nama, &barang.Harga, &barang.Stok)
+		err := rows.Scan(&barang.Id, &barang.Nama, &barang.Harga, &barang.Stok)
 		helper.PanicIfError(err)
 		barangs = append(barangs, barang)
 	}
