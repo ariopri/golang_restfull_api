@@ -7,15 +7,20 @@ import (
 	"github.com/ariopri/golang_restfull_api/models/domain"
 	"github.com/ariopri/golang_restfull_api/models/web"
 	"github.com/ariopri/golang_restfull_api/repository"
+	"github.com/go-playground/validator/v10"
 )
 
 type BarangServiceImpl struct {
 	BarangRepository repository.BarangRepository
 	DB               *sql.DB
+	Validate         *validator.Validate
 }
 
 func (service *BarangServiceImpl) Create(ctx context.Context, request web.BarangCreateRequest) web.BarangResponse {
 	//TODO implement me
+	err := service.Validate.Struct(request)
+	helper.PanicIfError(err)
+
 	tx, err := service.DB.Begin()
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
@@ -33,6 +38,9 @@ func (service *BarangServiceImpl) Create(ctx context.Context, request web.Barang
 
 func (service *BarangServiceImpl) Update(ctx context.Context, request web.BarangUpdateRequest) web.BarangResponse {
 	//TODO implement me
+	err := service.Validate.Struct(request)
+	helper.PanicIfError(err)
+
 	tx, err := service.DB.Begin()
 	helper.PanicIfError(err)
 	defer helper.CommitOrRollback(tx)
