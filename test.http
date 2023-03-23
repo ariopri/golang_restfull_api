@@ -1,0 +1,39 @@
+### Get all barangs
+GET http://localhost:3000/api/barangs
+X-API-Key: RAHASIA
+Accept: application/json
+
+### Create new barangs
+POST http://localhost:3000/api/barangs
+X-API-Key: RAHASIA
+Accept: application/json
+Content-Type: application/json
+
+{
+  "nama" : "",
+  "harga" : 120000,
+  "stok" : 7
+}
+
+### Get category by Id
+GET http://localhost:3000/api/barangs/3
+X-API-Key: RAHASIA
+Accept: application/json
+
+### Update category by Id
+PUT http://localhost:3000/api/barangs/1
+X-API-Key: RAHASIA
+Accept: application/json
+Content-Type: application/json
+
+
+{
+  "nama": "Rasberry Pi 3b",
+  "harga": 970000,
+    "stok": 5
+}
+
+### Delete category by Id
+DELETE http://localhost:3000/api/barangs/2
+X-API-Key: RAHASIA
+Accept: application/json
