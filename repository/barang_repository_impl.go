@@ -11,6 +11,10 @@ import (
 type BarangRepositoryImpl struct {
 }
 
+func NewBarangRepository() BarangRepository {
+	return &BarangRepositoryImpl{}
+}
+
 func (repository *BarangRepositoryImpl) Save(ctx context.Context, tx *sql.Tx, barang domain.Barang) domain.Barang {
 	//TODO implement me
 	SQL := "insert into barang(nama, harga, stok) values(?, ?, ?)"

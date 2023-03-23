@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"github.com/ariopri/golang_restfull_api/exception"
 	"github.com/ariopri/golang_restfull_api/helper"
 	"github.com/ariopri/golang_restfull_api/models/domain"
 	"github.com/ariopri/golang_restfull_api/models/web"
@@ -14,6 +15,10 @@ type BarangServiceImpl struct {
 	BarangRepository repository.BarangRepository
 	DB               *sql.DB
 	Validate         *validator.Validate
+}
+
+func NewBarangService(barangRepository repository.BarangRepository, DB *sql.DB, validate *validator.Validate) BarangService {
+	return &BarangServiceImpl{BarangRepository: barangRepository, DB: DB, Validate: validate}
 }
 
 func (service *BarangServiceImpl) Create(ctx context.Context, request web.BarangCreateRequest) web.BarangResponse {
@@ -39,7 +44,9 @@ func (service *BarangServiceImpl) Create(ctx context.Context, request web.Barang
 func (service *BarangServiceImpl) Update(ctx context.Context, request web.BarangUpdateRequest) web.BarangResponse {
 	//TODO implement me
 	err := service.Validate.Struct(request)
-	helper.PanicIfError(err)
+	if err != nil {
+		panic(exception.NewNotFoundError("Barang not found"))
+	}
 
 	tx, err := service.DB.Begin()
 	helper.PanicIfError(err)
@@ -65,8 +72,9 @@ func (service *BarangServiceImpl) Delete(ctx context.Context, barangId int) {
 	defer helper.CommitOrRollback(tx)
 
 	barang, err := service.BarangRepository.FindById(ctx, tx, barangId)
-	helper.PanicIfError(err)
-
+	if err != nil {
+		panic(exception.NewNotFoundError("Barang not found"))
+	}
 	service.BarangRepository.Delete(ctx, tx, barang)
 
 }
@@ -79,7 +87,9 @@ func (service *BarangServiceImpl) FindById(ctx context.Context, barangId int) (w
 	defer helper.CommitOrRollback(tx)
 
 	barang, err := service.BarangRepository.FindById(ctx, tx, barangId)
-	helper.PanicIfError(err)
+	if err != nil {
+		panic(exception.NewNotFoundError("Barang not found"))
+	}
 
 	return helper.ToBarangResponse(barang), nil
 }
